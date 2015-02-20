@@ -1,11 +1,7 @@
 "use strict";
 var serverVars = require('bunsen/helpers/serverVars');
 var _ = require('underscore');
-var baseCopy = _.extend(
-    {},
-    serverVars.get('mc.copy')
-    // add more objects that might have copy in them here
-);
+var svCopyPaths = [];
 var CopyText = function (options) {
     options = _.extend({
         copy: {}
@@ -15,7 +11,13 @@ var CopyText = function (options) {
 };
 CopyText.prototype = {
     get: function (copyKey) {
-        return this._copy[copyKey];
+        var text = this._copy[copyKey];
+        if (text) {
+            return text;
+        }
+        return _.reduce(svCopyPaths, function (text, keyPrefix) {
+            return text || serverVars.get(keyPrefix + '.' + copyKey);
+        }, text);
     },
     object: function () {
         return this._copy;
@@ -25,4 +27,10 @@ CopyText.prototype = {
     }
 };
 
-module.exports = new CopyText({copy: baseCopy});
+module.exports = function () {
+    return new CopyText();
+};
+module.exports.addGlobalSVPath = function (svCopyPath) {
+    svCopyPaths.push(svCopyPath);
+    return module.exports;
+};
