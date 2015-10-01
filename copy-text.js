@@ -1,6 +1,8 @@
 "use strict";
 var serverVars = require('server-vars');
 var _ = require('underscore');
+var requ = require('reku');
+var endpoints = require('dibs-endpoints');
 var svCopyPaths = [];
 var CopyText = function (options) {
     options = _.extend({
@@ -31,6 +33,12 @@ CopyText.prototype = {
     },
     extend: function (morecopy) {
         return new CopyText({copy: _.extend({}, this._copy, morecopy)});
+    },
+    load: function (file) {
+        return requ({
+            url: endpoints.staticRepo(file),
+            dataType: 'json'
+        }).then(this.extend.bind(this));
     }
 };
 
