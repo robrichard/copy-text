@@ -3,8 +3,6 @@ var serverVars = require('server-vars');
 var assign = require('lodash.assign');
 var reduceRight = require('lodash.reduceright');
 var template = require('lodash.template');
-var requ = require('reku');
-var endpoints = require('dibs-endpoints');
 var GLOBALCOPYKEY = '__COPYTEXT_GLOBAL_COPY__';
 var SVPATHSKEY = '__COPYTEXT_SV_COPY_PATHS__';
 var globalCopy = global[GLOBALCOPYKEY] = global[GLOBALCOPYKEY] || {};
@@ -38,12 +36,6 @@ CopyText.prototype = {
     },
     extend: function (morecopy) {
         return new CopyText({copy: assign({}, this._copy, morecopy)});
-    },
-    load: function (file) {
-        return requ({
-            url: endpoints.staticRepo(file),
-            dataType: 'json'
-        }).then(this.extend.bind(this));
     }
 };
 
