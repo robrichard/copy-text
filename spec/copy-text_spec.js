@@ -1,6 +1,7 @@
 "use strict";
 var copyTextApi = require('../copy-text');
 var serverVars = require('server-vars');
+var path = require('path');
 describe('copyText', function () {
     var copyText;
     beforeEach(function () {
@@ -58,5 +59,13 @@ describe('copyText', function () {
             expect(copyText.get('foo')).toEqual('hello');
             expect(copyText.get('bar')).toEqual('world');
         });
+    });
+    it('should use the global registry for server vars paths and global copy', function () {
+        var modpath = path.resolve(__dirname + "/../copy-text.js");
+        copyTextApi.addGlobalCopy({copyKey: 'copyOnTheGlobalObject'});
+        copyTextApi.addGlobalSVPath('test.copy');
+        require.cache[modpath] = undefined;
+        expect(require('../')().get('copyKey')).toEqual('copyOnTheGlobalObject');
+        expect(require('../')().get('someKeyInSvCopy')).toEqual('foo bar foo');
     });
 });
