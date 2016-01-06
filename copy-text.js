@@ -3,8 +3,10 @@ var serverVars = require('server-vars');
 var _ = require('underscore');
 var requ = require('reku');
 var endpoints = require('dibs-endpoints');
-var svCopyPaths = [];
-var globalCopy = {};
+var GLOBALCOPYKEY = '__COPYTEXT_GLOBAL_COPY__';
+var SVPATHSKEY = '__COPYTEXT_SV_COPY_PATHS__';
+var globalCopy = global[GLOBALCOPYKEY] = global[GLOBALCOPYKEY] || {};
+var svCopyPaths = global[SVPATHSKEY] = global[SVPATHSKEY] || [];
 var CopyText = function (options) {
     options = _.extend({
         copy: {}
