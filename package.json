@@ -21,9 +21,11 @@
   "homepage": "https://github.com/1stdibs/copy-text#readme",
   "dependencies": {
     "dibs-endpoints": "~1.1.1",
+    "lodash.assign": "~4.0.0",
+    "lodash.reduceright": "~4.0.0",
+    "lodash.template": "~4.0.0",
     "reku": "~1.1.1",
-    "server-vars": "~2.0.1",
-    "underscore": "~1.8.3"
+    "server-vars": "~2.0.1"
   },
   "devDependencies": {
     "jasmine": "~2.3.0"
