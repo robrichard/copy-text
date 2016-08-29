@@ -40,9 +40,18 @@ describe('copyText', function () {
         copyText = copyText.extend({copyKey: 'copyOnTheInstance'});
         expect(copyText.get('copyKey')).toEqual('copyOnTheInstance');
     });
-    it('should render using a template object when options.obj is specified', function () {
-        copyText = copyText.extend({fooBar: 'this <%= obj.thing %> is a template'});
-        expect(copyText.get('fooBar', {obj: {thing: 'template'}})).toEqual('this template is a template');
+    describe('template object', function () {
+        it('should expose options.obj to the template as obj', function () {
+            copyText = copyText.extend({fooBar: 'this <%= obj.thing %> is a template'});
+            expect(copyText.get('fooBar', {obj: {thing: 'template'}})).toEqual('this template is a template');
+        });
+        it('should expose the get methos as obj._copy inside the copy template', function () {
+            copyText = copyText.extend({
+                somethingElse: 'middle',
+                fooBar: `begin <%= obj._copy('sometingElse') end%>`
+            });
+            expect(copyText.get('fooBar')).toEqual('begin middle end');
+        });
     });
     it('should prefer the last path added by addGlobalSVPath', function () {
         copyTextApi.addGlobalSVPath('test.nextLevel');

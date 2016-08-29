@@ -17,6 +17,7 @@ var CopyText = function (options) {
 CopyText.prototype = {
     get: function (copyKey, options) {
         var text;
+        var templateVars;
         options = assign({
             passthrough: true
         }, options);
@@ -26,9 +27,10 @@ CopyText.prototype = {
                 return text || serverVars.get(keyPrefix + '.' + copyKey);
             }, text) || options.passthrough && copyKey;
         }
-        if (options.obj) {
-            text = template(text)(options.obj);
-        }
+        templateVars = assign({}, options.obj, {
+            _copy: this.get.bind(this)
+        });
+        text = template(text)(templateVars);
         return text;
     },
     object: function () {
