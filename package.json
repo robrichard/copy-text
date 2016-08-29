@@ -4,7 +4,7 @@
   "description": "a tool for getting copy text from server-vars and static objects",
   "main": "copy-text.js",
   "scripts": {
-    "test": "jasmine JASMINE_CONFIG_PATH=jasmine.json"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,6 @@
     "server-vars": "~2.0.1"
   },
   "devDependencies": {
-    "jasmine": "~2.3.0"
+    "mocha": "~3.0.2"
   }
 }
