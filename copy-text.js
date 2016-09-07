@@ -27,6 +27,9 @@ CopyText.prototype = {
                 return text || serverVars.get(keyPrefix + '.' + copyKey);
             }, text) || options.passthrough && copyKey;
         }
+        if ('string' !== typeof text) {
+            return false;
+        }
         templateVars = assign({}, options.obj, {
             _copy: this.get.bind(this)
         });

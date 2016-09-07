@@ -59,6 +59,14 @@ describe('copyText', function () {
         copyText = copyText.extend({copyKey: 'copyOnTheInstance'});
         assert.equal(copyText.get('copyKey'), 'copyOnTheInstance');
     });
+    describe('passthrough', function () {
+        it('should use the key as the copy when there is no copy defined for the key', function () {
+            assert.equal(copyText.get('use passthrough by default'), 'use passthrough by default');
+        });
+        it('should not use the key as the copy when options.passthrough is falsy', function () {
+            assert.equal(copyText.get('use passthrough by default', {passthrough: false}), false);
+        });
+    });
     describe('template object', function () {
         it('should expose options.obj to the template as obj', function () {
             copyText = copyText.extend({fooBar: 'this <%= obj.thing %> is a template'});
