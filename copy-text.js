@@ -1,14 +1,12 @@
 "use strict";
 var serverVars = require('server-vars');
-var assign = require('lodash.assign');
-var reduceRight = require('lodash.reduceright');
 var template = require('lodash.template');
 var GLOBALCOPYKEY = '__COPYTEXT_GLOBAL_COPY__';
 var SVPATHSKEY = '__COPYTEXT_SV_COPY_PATHS__';
 var globalCopy = global[GLOBALCOPYKEY] = global[GLOBALCOPYKEY] || {};
 var svCopyPaths = global[SVPATHSKEY] = global[SVPATHSKEY] || [];
 var CopyText = function (options) {
-    options = assign({
+    options = Object.assign({
         copy: {}
     }, options);
     this._copy = options.copy;
@@ -18,19 +16,19 @@ CopyText.prototype = {
     get: function (copyKey, options) {
         var text;
         var templateVars;
-        options = assign({
+        options = Object.assign({
             passthrough: true
         }, options);
         text = this._copy[copyKey] || globalCopy[copyKey];
         if (undefined === text) {
-            text = reduceRight(svCopyPaths, function (text, keyPrefix) {
+            text = svCopyPaths.reduceRight(function (text, keyPrefix) {
                 return text || serverVars.get(keyPrefix + '.' + copyKey);
             }, text) || options.passthrough && copyKey;
         }
         if ('string' !== typeof text) {
             return false;
         }
-        templateVars = assign({}, options.obj, {
+        templateVars = Object.assign({}, options.obj, {
             _copy: this.get.bind(this)
         });
         text = template(text)(templateVars);
@@ -40,7 +38,7 @@ CopyText.prototype = {
         return this._copy;
     },
     extend: function (morecopy) {
-        return new CopyText({copy: assign({}, this._copy, morecopy)});
+        return new CopyText({copy: Object.assign({}, this._copy, morecopy)});
     }
 };
 
@@ -52,6 +50,6 @@ module.exports.addGlobalSVPath = function (svCopyPath) {
     return module.exports;
 };
 module.exports.addGlobalCopy = function (copyObj) {
-    assign(globalCopy, copyObj);
+    Object.assign(globalCopy, copyObj);
     return module.exports;
 };

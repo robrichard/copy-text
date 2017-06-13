@@ -3,25 +3,29 @@ var assert = require('assert');
 var copyTextApi = require('../copy-text');
 var serverVars = require('server-vars');
 var path = require('path');
+var get = require('lodash.get');
 describe('copyText', function () {
     var copyText;
     beforeEach(function () {
         copyText = copyTextApi();
     });
     describe('server-vars integration', function () {
-        beforeEach(function () {
-            serverVars.get = serverVars._api.buildLayer({
-                test: {
-                    nextLevel: {
-                        copy: {
-                            someKeyInSvCopy: 'next level copy'
-                        }
-                    },
+        var mock = {
+            test: {
+                nextLevel: {
                     copy: {
-                        someKeyInSvCopy: 'foo bar foo'
+                        someKeyInSvCopy: 'next level copy'
                     }
+                },
+                copy: {
+                    someKeyInSvCopy: 'foo bar foo'
                 }
-            });
+            }
+        };
+        beforeEach(function () {
+            serverVars.get = function(p) {
+                return get(mock, p);
+            }
         });
         it('should default to serverVars paths passed through addGlobalSVPath', function () {
             copyTextApi.addGlobalSVPath('test.copy');
